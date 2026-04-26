@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="hero">
+    <div class="hero-inner">
+        <div class="topbar">
+            <a href="/" class="back-btn">←</a>
+            <h2 class="page-title">Tableau de bord</h2>
+            <div></div>
+        </div>
+    </div>
+</div>
+<div class="form-container">
+    <!-- STATS RAPIDES -->
+    <div class="stats-row" style="margin-bottom: 20px;">
+        <div class="stat-card">
+            <div class="stat-icon s-blue">👥</div>
+            <div class="stat-info">
+                <p>Total patients</p>
+                <strong>{{ total }}</strong>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon s-green">📋</div>
+            <div class="stat-info">
+                <p>Dossiers complets</p>
+                <strong>{{ total }}</strong>
+            </div>
+        </div>
+    </div>
+    <!-- BARRE DE RECHERCHE -->
+    <div class="search-bar" style="margin-bottom: 16px;">
+        <span>🔍</span>
+        <input type="text" id="searchInput"
+            placeholder="Rechercher un patient par nom, prénom, ville..."
+            onkeyup="rechercherPatient()">
+    </div>
+    <!-- TABLEAU PATIENTS -->
+    <div class="table-wrapper">
+        <table class="patient-table" id="patientTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nom & Prénom</th>
+                    <th>Sexe</th>
+                    <th>Date naissance</th>
+                    <th>Téléphone</th>
+                    <th>Ville</th>
+                    <th>Motif</th>
+                    <th>Enregistré le</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="patientBody">
+                {% for patient in patients %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>
+                        <div class="patient-name">
+                            <div class="patient-avatar">
+                                {{ patient.prenom[0] }}{{ patient.nom[0] }}
+                            </div>
+                            <div>
+                                <strong>{{ patient.prenom }} {{ patient.nom }}</strong>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ patient.sexe or '—' }}</td>
+                    <td>{{ patient.date_naissance or '—' }}</td>
+                    <td>{{ patient.telephone or '—' }}</td>
+                    <td>{{ patient.ville or '—' }}</td>
+                    <td>{{ patient.motif or '—' }}</td>
+                    <td>{{ patient.date_enregistrement or '—' }}</td>
+                    <td>
+                        <a href="/patient/{{ patient.id }}"
+                            class="btn-voir">Voir</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="9" class="empty-msg">
+                        Aucun patient enregistré
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

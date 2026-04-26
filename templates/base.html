@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HEALTH CARE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body>
+    {% block content %}{% endblock %}
+    <!-- BARRE DE NAVIGATION -->
+    <nav class="bottom-nav">
+        <a href="/" class="nav-item {% if request.endpoint == 'accueil' %}active{% endif %}">
+            <span>🏠</span>
+            <p>Accueil</p>
+        </a>
+        <a href="/formulaire" class="nav-item {% if request.endpoint == 'formulaire' %}active{% endif %}">
+            <span>📋</span>
+            <p>Formulaire</p>
+        </a>
+        <a href="/tableau_bord" class="nav-item {% if request.endpoint == 'tableau_bord' %}active{% endif %}">
+            <span>📊</span>
+            <p>Tableau</p>
+        </a>
+        <a href="/statistiques" class="nav-item {% if request.endpoint == 'statistiques' %}active{% endif %}">
+            <span>📈</span>
+            <p>Statistiques</p>
+        </a>
+    </nav>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

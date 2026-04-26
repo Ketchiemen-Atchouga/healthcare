@@ -1,0 +1,345 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="hero">
+    <div class="hero-inner">
+        <div class="topbar">
+            <a href="/" class="back-btn">←</a>
+            <h2 class="page-title">Nouveau Patient</h2>
+            <div></div>
+        </div>
+    </div>
+</div>
+<div class="form-container">
+    <form method="POST" action="/enregistrer">
+        <!-- SECTION 1 -->
+        <div class="form-section">
+            <h3>🧾 Informations personnelles</h3>
+            <div class="form-group">
+                <label>Nom</label>
+                <input type="text" name="nom" placeholder="Nom de famille" required>
+            </div>
+            <div class="form-group">
+                <label>Prénom</label>
+                <input type="text" name="prenom" placeholder="Prénom" required>
+            </div>
+            <div class="form-group">
+                <label>Sexe</label>
+                <select name="sexe">
+                    <option value="">-- Sélectionner --</option>
+                    <option>Masculin</option>
+                    <option>Féminin</option>
+                    <option>Autre</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Date de naissance</label>
+                <input type="date" name="date_naissance">
+            </div>
+            <div class="form-group">
+                <label>Téléphone</label>
+                <input type="tel" name="telephone" placeholder="+000 00 00 00 00">
+            </div>
+            <div class="form-group">
+                <label>Ville</label>
+                <input type="text" name="ville" placeholder="Ville">
+            </div>
+        </div>
+        <!-- SECTION 2 -->
+        <div class="form-section">
+            <h3>🏥 Motif de consultation</h3>
+            <div class="form-group">
+                <label>Motif principal</label>
+                <textarea name="motif" placeholder="Décrivez le motif..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Depuis quand ?</label>
+                <input type="text" name="depuis_quand" placeholder="Ex: depuis 3 jours...">
+            </div>
+            <div class="form-group">
+                <label>Symptômes constants ou occasionnels ?</label>
+                <select name="constance">
+                    <option value="">-- Sélectionner --</option>
+                    <option>Constants</option>
+                    <option>Occasionnels</option>
+                    <option>Progressifs</option>
+                </select>
+            </div>
+        </div>
+        <!-- SECTION 3 -->
+        <div class="form-section">
+            <h3>🤒 Symptômes en cours</h3>
+            <div class="form-group">
+                <label>Symptômes présents</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="symptomes" value="Fièvre"> 🌡️ Fièvre
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="symptomes" value="Toux"> 😮‍💨 Toux
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="symptomes" value="Douleur"> 🩸 Douleur
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="symptomes" value="Fatigue"> 😴 Fatigue
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="symptomes" value="Nausées"> 🤢 Nausées
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="symptomes" value="Vomissements"> 🤮 Vomissements
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="symptomes" value="Maux de tête"> 🧠 Maux de tête
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="symptomes" value="Essoufflement"> 🫁 Essoufflement
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="symptomes" value="Vertiges"> 💫 Vertiges
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="symptomes" value="Diarrhée"> 🚽 Diarrhée
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Intensité de la douleur (0 à 10)</label>
+                <input type="number" name="douleur_intensite" min="0" max="10" placeholder="Ex: 5">
+            </div>
+         <div class="form-group">
+                <label>Intensité de la douleur (0 à 10)</label>
+                <input type="number" name="douleur_intensite" min="0" max="10" placeholder="Ex: 5">
+            </div>
+            <div class="form-group">
+                <label>Localisation de la douleur</label>
+                <input type="text" name="localisation_douleur" placeholder="Ex: abdomen, poitrine...">
+            </div>
+            <div class="form-group">
+                <label>Facteurs aggravants</label>
+                <input type="text" name="aggravants" placeholder="Ex: effort, alimentation...">
+            </div>
+            <div class="form-group">
+                <label>Facteurs soulageants</label>
+                <input type="text" name="soulageants" placeholder="Ex: repos, médicament...">
+            </div>
+        </div>
+        <!-- SECTION 4 -->
+        <div class="form-section">
+            <h3>🧬 Antécédents médicaux</h3>
+            <div class="form-group">
+                <label>Maladies chroniques</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="chroniques" value="Diabète type 2"> 🩸 Diabète type 2
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="chroniques" value="Hypertension"> ❤️ Hypertension
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="chroniques" value="Asthme"> 🫁 Asthme
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="chroniques" value="Insuffisance cardiaque"> 💔 Insuffisance cardiaque
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="chroniques" value="Cancer"> 🎗️ Cancer
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Maladies passées importantes</label>
+                <textarea name="maladies_passees" placeholder="Listez les maladies..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Hospitalisations antérieures</label>
+                <textarea name="hospitalisations" placeholder="Dates et motifs..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Opérations / Chirurgies</label>
+                <textarea name="chirurgies" placeholder="Type et date..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Allergies connues</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="allergies" value="Pénicilline"> 💊 Pénicilline
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="allergies" value="Aspirine"> 💊 Aspirine
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="allergies" value="Iode"> 🧪 Iode
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="allergies" value="Arachides"> 🥜 Arachides
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="allergies" value="Latex"> 🧤 Latex
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Médicaments en cours</label>
+                <textarea name="medicaments" placeholder="Nom, dose, fréquence..."></textarea>
+            </div>
+        </div>
+           <!-- SECTION 5 -->
+        <div class="form-section">
+            <h3>👨‍👩‍👧 Antécédents familiaux</h3>
+            <div class="form-group">
+                <label>Maladies familiales</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="famille" value="Diabète"> 🩸 Diabète
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="famille" value="Maladies cardiaques"> ❤️ Maladies cardiaques
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="famille" value="Cancer"> 🎗️ Cancer
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="famille" value="Hypertension"> 📊 Hypertension
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="famille" value="Troubles psychiatriques"> 🧠 Troubles psychiatriques
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Précisions</label>
+                <textarea name="famille_detail" placeholder="Ex: père diabétique, mère hypertendue..."></textarea>
+            </div>
+        </div>
+        <!-- SECTION 6 -->
+        <div class="form-section">
+            <h3>🚬 Habitudes de vie</h3>
+            <div class="form-group">
+                <label>Tabac</label>
+                <select name="tabac">
+                    <option value="">-- Sélectionner --</option>
+                    <option>Non-fumeur</option>
+                    <option>Fumeur actif</option>
+                    <option>Ex-fumeur</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Alcool</label>
+                <select name="alcool">
+                    <option value="">-- Sélectionner --</option>
+                    <option>Jamais</option>
+                    <option>Occasionnel</option>
+                    <option>Régulier</option>
+                    <option>Excessif</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Drogues / Substances</label>
+                <select name="drogues">
+                    <option value="">-- Sélectionner --</option>
+                    <option>Aucune</option>
+                    <option>Cannabis</option>
+                    <option>Autres substances</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Activité physique</label>
+                <select name="sport">
+                    <option value="">-- Sélectionner --</option>
+                    <option>Sédentaire</option>
+                    <option>Modérée</option>
+                    <option>Régulière</option>
+                    <option>Intensive</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Alimentation</label>
+                <select name="alimentation">
+                    <option value="">-- Sélectionner --</option>
+                    <option>Équilibrée</option>
+                    <option>Variable</option>
+                    <option>Déséquilibrée</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Qualité du sommeil</label>
+                <select name="sommeil">
+                    <option value="">-- Sélectionner --</option>
+                    <option>Bonne</option>
+                    <option>Perturbée</option>
+                    <option>Mauvaise</option>
+                    <option>Insomnie</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Autres habitudes à signaler</label>
+                <textarea name="autres_habitudes" placeholder="Précisez..."></textarea>
+            </div>
+        </div>
+        <!-- SECTION 7 -->
+      <div class="form-section">
+            <h3>🧠 État psychologique</h3>
+            <div class="form-group">
+                <label>Niveau de stress</label>
+                <select name="stress">
+                    <option value="">-- Sélectionner --</option>
+                    <option>Faible</option>
+                    <option>Modéré</option>
+                    <option>Élevé</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Humeur générale</label>
+                <select name="humeur">
+                    <option value="">-- Sélectionner --</option>
+                    <option>Bonne</option>
+                    <option>Variable</option>
+                    <option>Déprimée</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Anxiété</label>
+                <select name="anxiete">
+                    <option value="">-- Sélectionner --</option>
+                    <option>Aucune</option>
+                    <option>Légère</option>
+                    <option>Modérée</option>
+                    <option>Sévère</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Précisions psychologiques</label>
+                <textarea name="psy_detail" placeholder="Détails supplémentaires..."></textarea>
+            </div>
+        </div>
+        <!-- SECTION 8 -->
+        <div class="form-section">
+            <h3>📊 Données biométriques</h3>
+            <div class="form-group">
+                <label>Poids (kg)</label>
+                <input type="number" name="poids" placeholder="Ex: 70" step="0.1">
+            </div>
+            <div class="form-group">
+                <label>Taille (cm)</label>
+                <input type="number" name="taille" placeholder="Ex: 170">
+            </div>
+            <div class="form-group">
+                <label>Tension artérielle</label>
+                <input type="text" name="tension" placeholder="Ex: 120/80">
+            </div>
+            <div class="form-group">
+                <label>Fréquence cardiaque (bpm)</label>
+                <input type="number" name="fc" placeholder="Ex: 72">
+            </div>
+            <div class="form-group">
+                <label>Température (°C)</label>
+                <input type="number" name="temperature" placeholder="Ex: 37.2" step="0.1">
+            </div>
+        </div>
+        <button type="submit" class="submit-btn">
+            ✅ Enregistrer le patient
+        </button>
+    </form>
+</div>
+{% endblock %}   

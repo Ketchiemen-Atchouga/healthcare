@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="hero">
+    <div class="hero-inner">
+        <div class="topbar">
+            <a href="/" class="back-btn">←</a>
+            <h2 class="page-title">Statistiques</h2>
+            <div></div>
+        </div>
+    </div>
+</div>
+<div class="form-container">
+    <!-- STATS CARDS -->
+    <div class="stats-row" style="margin-bottom: 20px;">
+        <div class="stat-card">
+            <div class="stat-icon s-blue">👥</div>
+            <div class="stat-info">
+                <p>Total patients</p>
+                <strong>{{ stats.total }}</strong>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon s-green">⚖️</div>
+            <div class="stat-info">
+                <p>Poids moyen</p>
+                <strong>{{ stats.poids_moyen }} kg</strong>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon s-orange">📏</div>
+            <div class="stat-info">
+                <p>IMC moyen</p>
+                <strong>{{ stats.imc_moyen }}</strong>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon s-pink">❤️</div>
+            <div class="stat-info">
+                <p>FC moyenne</p>
+                <strong>{{ stats.fc_moyen }} bpm</strong>
+            </div>
+        </div>
+    </div>
+    <!-- GRAPHIQUE SEXE -->
+    <div class="chart-card">
+        <h3>👥 Répartition par sexe</h3>
+        <canvas id="sexeChart"></canvas>
+    </div>
+    <!-- GRAPHIQUE POIDS -->
+    <div class="chart-card">
+        <h3>⚖️ Distribution du poids</h3>
+        <canvas id="poidsChart"></canvas>
+    </div>
+    <!-- GRAPHIQUE FC -->
+    <div class="chart-card">
+        <h3>❤️ Fréquence cardiaque</h3>
+        <canvas id="fcChart"></canvas>
+    </div>
+    <!-- GRAPHIQUE IMC -->
+    <div class="chart-card">
+        <h3>📊 Distribution IMC</h3>
+        <canvas id="imcChart"></canvas>
+    </div>
+    <!-- TABLEAU STATISTIQUES -->
+    <div class="chart-card">
+        <h3>📐 Calculs statistiques</h3>
+        <table class="stat-table">
+            <thead>
+                <tr>
+                    <th>Indicateur</th>
+                    <th>Moyenne</th>
+                    <th>Médiane</th>
+                    <th>Écart-type</th>
+                    <th>Q1</th>
+                    <th>Q3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Poids (kg)</td>
+                    <td>{{ stats.poids_moyen }}</td>
+                    <td>{{ stats.poids_mediane }}</td>
+                    <td>{{ stats.poids_ecart }}</td>
+                    <td>{{ stats.poids_q1 }}</td>
+                    <td>{{ stats.poids_q3 }}</td>
+                </tr>
+                <tr>
+                    <td>Taille (cm)</td>
+                    <td>{{ stats.taille_moyen }}</td>
+                    <td>{{ stats.taille_mediane }}</td>
+                    <td>{{ stats.taille_ecart }}</td>
+                    <td>{{ stats.taille_q1 }}</td>
+                    <td>{{ stats.taille_q3 }}</td>
+                </tr>
+                <tr>
+                    <td>FC (bpm)</td>
+                    <td>{{ stats.fc_moyen }}</td>
+                    <td>{{ stats.fc_mediane }}</td>
+                    <td>{{ stats.fc_ecart }}</td>
+                    <td>{{ stats.fc_q1 }}</td>
+                    <td>{{ stats.fc_q3 }}</td>
+                </tr>
+                <tr>
+                    <td>Température (°C)</td>
+                    <td>{{ stats.temp_moyen }}</td>
+                    <td>{{ stats.temp_mediane }}</td>
+                    <td>{{ stats.temp_ecart }}</td>
+                    <td>{{ stats.temp_q1 }}</td>
+                    <td>{{ stats.temp_q3 }}</td>
+                </tr>
+                <tr>
+                    <td>IMC</td>
+                    <td>{{ stats.imc_moyen }}</td>
+                    <td>{{ stats.imc_mediane }}</td>
+                    <td>{{ stats.imc_ecart }}</td>
+                    <td>{{ stats.imc_q1 }}</td>
+                    <td>{{ stats.imc_q3 }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const sexeData = {{ stats.sexe_data | tojson }};
+    const poidsData = {{ stats.poids_data | tojson }};
+    const fcData = {{ stats.fc_data | tojson }};
+    const imcData = {{ stats.imc_data | tojson }};
+    // Graphique Sexe
+    new Chart(document.getElementById('sexeChart'), {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(sexeData),
+            datasets: [{
+                data: Object.values(sexeData),
+                backgroundColor: ['#1A56DB', '#0FA86A', '#F59E0B']
+            }]
+        }
+    });
+    // Graphique Poids
+    new Chart(document.getElementById('poidsChart'), {
+        type: 'bar',
+        data: {
+            labels: poidsData.map((_, i) => 'P' + (i+1)),
+            datasets: [{
+                label: 'Poids (kg)',
+                data: poidsData,
+                backgroundColor: '#1A56DB'
+            }]
+        }
+    });
+    // Graphique FC
+    new Chart(document.getElementById('fcChart'), {
+        type: 'line',
+        data: {
+            labels: fcData.map((_, i) => 'P' + (i+1)),
+            datasets: [{
+                label: 'FC (bpm)',
+                data: fcData,
+                borderColor: '#0FA86A',
+                tension: 0.4,
+                fill: false
+            }]
+        }
+    });
+    // Graphique IMC
+    new Chart(document.getElementById('imcChart'), {
+        type: 'bar',
+        data: {
+            labels: imcData.map((_, i) => 'P' + (i+1)),
+            datasets: [{
+                label: 'IMC',
+                data: imcData,
+                backgroundColor: '#F59E0B'
+            }]
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="hero">
+    <div class="hero-inner">
+        <div class="topbar">
+            <a href="/tableau_bord" class="back-btn">←</a>
+            <h2 class="page-title">Dossier Patient</h2>
+            <div></div>
+        </div>
+    </div>
+</div>
+<div class="form-container">
+    <!-- IDENTITÉ -->
+    <div class="detail-card">
+        <div class="patient-avatar-big">
+            {{ patient.prenom[0] }}{{ patient.nom[0] }}
+        </div>
+        <h2 class="patient-fullname">
+            {{ patient.prenom }} {{ patient.nom }}
+        </h2>
+        <p class="patient-date">
+            Enregistré le {{ patient.date_enregistrement }}
+        </p>
+    </div>
+    <!-- INFOS PERSONNELLES -->
+    <div class="detail-section">
+        <h3>🧾 Informations personnelles</h3>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">Sexe</span>
+                <span class="detail-value">{{ patient.sexe or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Date de naissance</span>
+                <span class="detail-value">{{ patient.date_naissance or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Téléphone</span>
+                <span class="detail-value">{{ patient.telephone or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Ville</span>
+                <span class="detail-value">{{ patient.ville or '—' }}</span>
+            </div>
+        </div>
+    </div>
+    <!-- MOTIF -->
+    <div class="detail-section">
+        <h3>🏥 Motif de consultation</h3>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">Motif</span>
+                <span class="detail-value">{{ patient.motif or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Depuis quand</span>
+                <span class="detail-value">{{ patient.depuis_quand or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Constance</span>
+                <span class="detail-value">{{ patient.constance or '—' }}</span>
+            </div>
+        </div>
+    </div>
+    <!-- SYMPTÔMES -->
+    <div class="detail-section">
+        <h3>🤒 Symptômes</h3>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">Symptômes</span>
+                <span class="detail-value">{{ patient.symptomes or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Intensité douleur</span>
+                <span class="detail-value">{{ patient.douleur_intensite or '—' }}/10</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Localisation</span>
+                <span class="detail-value">{{ patient.localisation_douleur or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Aggravants</span>
+                <span class="detail-value">{{ patient.aggravants or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Soulageants</span>
+                <span class="detail-value">{{ patient.soulageants or '—' }}</span>
+            </div>
+        </div>
+    </div>
+    <!-- ANTÉCÉDENTS MÉDICAUX -->
+    <div class="detail-section">
+        <div class="detail-section">
+        <h3>🧬 Antécédents médicaux</h3>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">Maladies chroniques</span>
+                <span class="detail-value">{{ patient.chroniques or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Maladies passées</span>
+                <span class="detail-value">{{ patient.maladies_passees or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Hospitalisations</span>
+                <span class="detail-value">{{ patient.hospitalisations or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Chirurgies</span>
+                <span class="detail-value">{{ patient.chirurgies or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Allergies</span>
+                <span class="detail-value">{{ patient.allergies or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Médicaments</span>
+                <span class="detail-value">{{ patient.medicaments or '—' }}</span>
+            </div>
+        </div>
+    </div>
+    <!-- ANTÉCÉDENTS FAMILIAUX -->
+    <div class="detail-section">
+        <h3>👨‍👩‍👧 Antécédents familiaux</h3>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">Maladies familiales</span>
+                <span class="detail-value">{{ patient.famille or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Précisions</span>
+                <span class="detail-value">{{ patient.famille_detail or '—' }}</span>
+            </div>
+        </div>
+    </div>
+    <!-- HABITUDES DE VIE -->
+     <div class="detail-section">
+        <h3>🚬 Habitudes de vie</h3>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">Tabac</span>
+                <span class="detail-value">{{ patient.tabac or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Alcool</span>
+                <span class="detail-value">{{ patient.alcool or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Drogues</span>
+                <span class="detail-value">{{ patient.drogues or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Sport</span>
+                <span class="detail-value">{{ patient.sport or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Alimentation</span>
+                <span class="detail-value">{{ patient.alimentation or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Sommeil</span>
+                <span class="detail-value">{{ patient.sommeil or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Autres habitudes</span>
+                <span class="detail-value">{{ patient.autres_habitudes or '—' }}</span>
+            </div>
+        </div>
+    </div>
+    <!-- ÉTAT PSYCHOLOGIQUE -->
+    <div class="detail-section">
+        <h3>🧠 État psychologique</h3>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">Stress</span>
+                <span class="detail-value">{{ patient.stress or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Humeur</span>
+                <span class="detail-value">{{ patient.humeur or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Anxiété</span>
+                <span class="detail-value">{{ patient.anxiete or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Précisions</span>
+                <span class="detail-value">{{ patient.psy_detail or '—' }}</span>
+            </div>
+        </div>
+    </div>
+    <!-- BIOMÉTRIE -->
+     <div class="detail-section">
+        <h3>📊 Données biométriques</h3>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <span class="detail-label">Poids</span>
+                <span class="detail-value">{{ patient.poids or '—' }} kg</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Taille</span>
+                <span class="detail-value">{{ patient.taille or '—' }} cm</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Tension</span>
+                <span class="detail-value">{{ patient.tension or '—' }}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">FC</span>
+                <span class="detail-value">{{ patient.fc or '—' }} bpm</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Température</span>
+                <span class="detail-value">{{ patient.temperature or '—' }} °C</span>
+            </div>
+        </div>
+    </div>
+    <!-- BOUTON RETOUR -->
+    <a href="/tableau_bord" class="submit-btn"
+        style="display:block; text-align:center; text-decoration:none;">
+        ← Retour au tableau de bord
+    </a>
+</div>
+{% endblock %}

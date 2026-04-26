@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-inner">
+        <!-- LOGO + NOM -->
+        <div class="app-brand">
+            <img src="{{ url_for('static', filename='images/logo.png') }}"
+                 alt="logo" class="logo-img">
+            <h1 class="app-name">HEALTH CARE</h1>
+        </div>
+        <!-- MESSAGE DE BIENVENUE -->
+        <p class="welcome-msg">
+            👋 Bonjour, bienvenue sur l'application de
+            collecte des données de la santé communautaire.
+        </p>
+        <!-- BARRE DE RECHERCHE -->
+        <div class="search-bar" style="margin-top: 16px;">
+            <span>🔍</span>
+            <input type="text" placeholder="Rechercher un service...">
+        </div>
+    </div>
+</div>
+<!-- SERVICES -->
+<p class="section-title">Services</p>
+<div class="services-grid">
+    <a href="/formulaire" class="service-card">
+        <div class="service-icon s-blue">👨‍⚕️</div>
+        <span>Nouveau patient</span>
+    </a>
+    <a href="/tableau_bord" class="service-card">
+        <div class="service-icon s-green">📋</div>
+        <span>Dossiers</span>
+    </a>
+    <a href="/statistiques" class="service-card">
+        <div class="service-icon s-orange">📈</div>
+        <span>Statistiques</span>
+    </a>
+    <a href="#" class="service-card">
+        <div class="service-icon s-pink">🧬</div>
+        <span>Analyses</span>
+    </a>
+</div>
+<!-- BANNIÈRE -->
+<div class="banner">
+    <div class="banner-text">
+        <h3>Les Meilleurs<br>Services Médicaux</h3>
+        <p>Gérez vos patients en toute sécurité.</p>
+        <a href="/formulaire" class="banner-btn">Nouveau patient →</a>
+    </div>
+    <img class="banner-img"
+        src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&q=80"
+        alt="Médecin">
+</div>
+<!-- STATS -->
+<p class="section-title">Vue d'ensemble</p>
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="stat-icon s-blue">👥</div>
+        <div class="stat-info">
+            <p>Total patients</p>
+            <strong>{{ total_patients }}</strong>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon s-green">📋</div>
+        <div class="stat-info">
+            <p>Dossiers</p>
+            <strong>{{ total_patients }}</strong>
+        </div>
+    </div>
+</div>
+{% endblock %}
