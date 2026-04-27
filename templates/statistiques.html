@@ -10,12 +10,11 @@
     </div>
 </div>
 <div class="form-container">
-    <!-- STATS CARDS -->
-    <div class="stats-row" style="margin-bottom: 20px;">
+    <div class="stats-row" style="margin-bottom:20px">
         <div class="stat-card">
             <div class="stat-icon s-blue">👥</div>
             <div class="stat-info">
-                <p>Total patients</p>
+                <p>Patients</p>
                 <strong>{{ stats.total }}</strong>
             </div>
         </div>
@@ -41,29 +40,55 @@
             </div>
         </div>
     </div>
-    <!-- GRAPHIQUE SEXE -->
+    <!-- RÉPARTITION PAR SEXE -->
     <div class="chart-card">
         <h3>👥 Répartition par sexe</h3>
-        <canvas id="sexeChart"></canvas>
+        <canvas id="cSexe" style="width:100%;height:250px"></canvas>
     </div>
-    <!-- GRAPHIQUE POIDS -->
+    <!-- DISTRIBUTION POIDS -->
     <div class="chart-card">
         <h3>⚖️ Distribution du poids</h3>
-        <canvas id="poidsChart"></canvas>
+        <canvas id="cPoids" style="width:100%;height:250px"></canvas>
     </div>
-    <!-- GRAPHIQUE FC -->
-    <div class="chart-card">
+    <!-- FRÉQUENCE CARDIAQUE -->
+     <div class="chart-card">
         <h3>❤️ Fréquence cardiaque</h3>
-        <canvas id="fcChart"></canvas>
+        <canvas id="cFC" style="width:100%;height:250px"></canvas>
     </div>
-    <!-- GRAPHIQUE IMC -->
+    <!-- IMC -->
     <div class="chart-card">
         <h3>📊 Distribution IMC</h3>
-        <canvas id="imcChart"></canvas>
+        <canvas id="cIMC" style="width:100%;height:250px"></canvas>
     </div>
-    <!-- TABLEAU STATISTIQUES -->
+    <!-- BOÎTES À MOUSTACHE -->
     <div class="chart-card">
-        <h3>📐 Calculs statistiques</h3>
+        <h3>📦 Boîtes à moustaches</h3>
+        <canvas id="cBox" style="width:100%;height:300px"></canvas>
+    </div>
+    <!-- RÉGRESSION POIDS vs TAILLE -->
+    <div class="chart-card">
+        <h3>📈 Régression — Poids vs Taille</h3>
+        <canvas id="cReg1" style="width:100%;height:280px"></canvas>
+        <p style="margin-top:8px;font-size:0.85rem;color:#6B7A99">
+            y = <strong>{{ stats.reg_poids_taille.a }}</strong>x +
+            <strong>{{ stats.reg_poids_taille.b }}</strong>
+            &nbsp;|&nbsp; R² = <strong>{{ stats.reg_poids_taille.r2 }}</strong>
+        </p>
+    </div>
+    <!-- RÉGRESSION TAILLE vs FC -->
+    <div class="chart-card">
+        <h3>📈 Régression — Taille vs FC</h3>
+        <canvas id="cReg2" style="width:100%;height:280px"></canvas>
+        <p style="margin-top:8px;font-size:0.85rem;color:#6B7A99">
+            y = <strong>{{ stats.reg_taille_fc.a }}</strong>x +
+            <strong>{{ stats.reg_taille_fc.b }}</strong>
+            &nbsp;|&nbsp; R² = <strong>{{ stats.reg_taille_fc.r2 }}</strong>
+        </p>
+    </div>
+    <!-- TABLEAU -->
+      <div class="chart-card">
+        <h3>📐 Tableau statistique</h3>
+        <div style="overflow-x:auto">
         <table class="stat-table">
             <thead>
                 <tr>
@@ -73,6 +98,8 @@
                     <th>Écart-type</th>
                     <th>Q1</th>
                     <th>Q3</th>
+                    <th>Min</th>
+                    <th>Max</th>
                 </tr>
             </thead>
             <tbody>
@@ -83,6 +110,8 @@
                     <td>{{ stats.poids_ecart }}</td>
                     <td>{{ stats.poids_q1 }}</td>
                     <td>{{ stats.poids_q3 }}</td>
+                    <td>{{ stats.poids_min }}</td>
+                    <td>{{ stats.poids_max }}</td>
                 </tr>
                 <tr>
                     <td>Taille (cm)</td>
@@ -91,6 +120,8 @@
                     <td>{{ stats.taille_ecart }}</td>
                     <td>{{ stats.taille_q1 }}</td>
                     <td>{{ stats.taille_q3 }}</td>
+                    <td>{{ stats.taille_min }}</td>
+                    <td>{{ stats.taille_max }}</td>
                 </tr>
                 <tr>
                     <td>FC (bpm)</td>
@@ -99,14 +130,18 @@
                     <td>{{ stats.fc_ecart }}</td>
                     <td>{{ stats.fc_q1 }}</td>
                     <td>{{ stats.fc_q3 }}</td>
+                    <td>{{ stats.fc_min }}</td>
+                    <td>{{ stats.fc_max }}</td>
                 </tr>
                 <tr>
-                    <td>Température (°C)</td>
+                    <td>Température</td>
                     <td>{{ stats.temp_moyen }}</td>
                     <td>{{ stats.temp_mediane }}</td>
                     <td>{{ stats.temp_ecart }}</td>
                     <td>{{ stats.temp_q1 }}</td>
                     <td>{{ stats.temp_q3 }}</td>
+                    <td>{{ stats.temp_min }}</td>
+                    <td>{{ stats.temp_max }}</td>
                 </tr>
                 <tr>
                     <td>IMC</td>
@@ -115,66 +150,223 @@
                     <td>{{ stats.imc_ecart }}</td>
                     <td>{{ stats.imc_q1 }}</td>
                     <td>{{ stats.imc_q3 }}</td>
+                    <td>{{ stats.imc_min }}</td>
+                    <td>{{ stats.imc_max }}</td>
                 </tr>
             </tbody>
         </table>
+        </div>
     </div>
 </div>
-<!-- CHART.JS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const sexeData = {{ stats.sexe_data | tojson }};
-    const poidsData = {{ stats.poids_data | tojson }};
-    const fcData = {{ stats.fc_data | tojson }};
-    const imcData = {{ stats.imc_data | tojson }};
-    // Graphique Sexe
-    new Chart(document.getElementById('sexeChart'), {
-        type: 'doughnut',
-        data: {
-            labels: Object.keys(sexeData),
-            datasets: [{
-                data: Object.values(sexeData),
-                backgroundColor: ['#1A56DB', '#0FA86A', '#F59E0B']
-            }]
-        }
+    var poids = {{ stats.poids_data | tojson }};
+var fc = {{ stats.fc_data | tojson }};
+var imc = {{ stats.imc_data | tojson }};
+var sexe = {{ stats.sexe_data | tojson }};
+var rpt = {{ stats.reg_poids_taille | tojson }};
+var rfc = {{ stats.reg_taille_fc | tojson }};
+var boxes = [
+    {label:'Poids(kg)',min:{{ stats.poids_min }},q1:{{ stats.poids_q1 }},med:{{ stats.poids_mediane }},q3:{{ stats.poids_q3 }},max:{{ stats.poids_max }},col:'#1A56DB'},
+    {label:'FC(bpm)',min:{{ stats.fc_min }},q1:{{ stats.fc_q1 }},med:{{ stats.fc_mediane }},q3:{{ stats.fc_q3 }},max:{{ stats.fc_max }},col:'#0FA86A'},
+    {label:'IMC',min:{{ stats.imc_min }},q1:{{ stats.imc_q1 }},med:{{ stats.imc_mediane }},q3:{{ stats.imc_q3 }},max:{{ stats.imc_max }},col:'#F59E0B'}
+];
+function init(id,h){
+    var c=document.getElementById(id);
+    var W=c.parentElement.offsetWidth-40;
+    c.width=W; c.height=h;
+    var ctx=c.getContext('2d');
+    ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,h);
+    return {c:c,ctx:ctx,W:W,H:h};
+}
+// BARRES
+function drawBars(id,data,label,color){
+    var g=init(id,250);
+    var ctx=g.ctx,W=g.W,H=g.H;
+    var pL=50,pR=20,pT=20,pB=40;
+    var n=data.length; if(n===0)return;
+    var mx=Math.max.apply(null,data)||1;
+    var bw=(W-pL-pR)/n*0.6;
+    var gap=(W-pL-pR)/n;
+    ctx.fillStyle='#666'; ctx.font='11px Arial'; ctx.textAlign='right';
+    for(var i=0;i<=5;i++){
+        var v=mx*i/5;
+        var y=pT+(H-pT-pB)*(1-i/5);
+        ctx.fillText(Math.round(v),pL-4,y+4);
+        ctx.strokeStyle='#eee'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(pL,y); ctx.lineTo(W-pR,y); ctx.stroke();
+    }
+    ctx.strokeStyle='#ccc'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pL,pT); ctx.lineTo(pL,H-pB); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pL,H-pB); ctx.lineTo(W-pR,H-pB); ctx.stroke();
+    data.forEach(function(v,i){
+        var x=pL+gap*i+gap/2-bw/2;
+        var h=(v/mx)*(H-pT-pB);
+        ctx.fillStyle=color;
+        ctx.fillRect(x,H-pB-h,bw,h);
+        ctx.fillStyle='#333'; ctx.font='10px Arial'; ctx.textAlign='center';
+        ctx.fillText('P'+(i+1),x+bw/2,H-pB+14);
     });
-    // Graphique Poids
-    new Chart(document.getElementById('poidsChart'), {
-        type: 'bar',
-        data: {
-            labels: poidsData.map((_, i) => 'P' + (i+1)),
-            datasets: [{
-                label: 'Poids (kg)',
-                data: poidsData,
-                backgroundColor: '#1A56DB'
-            }]
-        }
+    ctx.fillStyle=color; ctx.font='11px Arial'; ctx.textAlign='left';
+    ctx.fillText('■ '+label,pL+5,pT+14);
+}
+// COURBE
+function drawLine(id,data,label,color){
+    var g=init(id,250);
+    var ctx=g.ctx,W=g.W,H=g.H;
+    var pL=50,pR=20,pT=20,pB=40;
+    var n=data.length; if(n<2)return;
+    var mn=Math.min.apply(null,data),mx=Math.max.apply(null,data);
+    var rng=mx-mn||1;
+    var gap=(W-pL-pR)/(n-1);
+    var sx=function(i){return pL+gap*i;};
+    var sy=function(v){return pT+(H-pT-pB)*(1-(v-mn)/rng);};
+    ctx.fillStyle='#666'; ctx.font='11px Arial'; ctx.textAlign='right';
+    for(var i=0;i<=4;i++){
+        var v=mn+rng*i/4;
+        var y=sy(v);
+        ctx.fillText(Math.round(v),pL-4,y+4);
+        ctx.strokeStyle='#eee'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(pL,y); ctx.lineTo(W-pR,y); ctx.stroke();
+    }
+    ctx.strokeStyle='#ccc'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pL,pT); ctx.lineTo(pL,H-pB); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pL,H-pB); ctx.lineTo(W-pR,H-pB); ctx.stroke();
+    ctx.beginPath(); ctx.strokeStyle=color; ctx.lineWidth=2;
+    data.forEach(function(v,i){
+        if(i===0) ctx.moveTo(sx(i),sy(v));
+        else ctx.lineTo(sx(i),sy(v));
     });
-    // Graphique FC
-    new Chart(document.getElementById('fcChart'), {
-        type: 'line',
-        data: {
-            labels: fcData.map((_, i) => 'P' + (i+1)),
-            datasets: [{
-                label: 'FC (bpm)',
-                data: fcData,
-                borderColor: '#0FA86A',
-                tension: 0.4,
-                fill: false
-            }]
-        }
+    ctx.stroke();
+    data.forEach(function(v,i){
+        ctx.beginPath(); ctx.fillStyle=color;
+        ctx.arc(sx(i),sy(v),4,0,2*Math.PI); ctx.fill();
+        ctx.fillStyle='#333'; ctx.font='10px Arial'; ctx.textAlign='center';
+        ctx.fillText('P'+(i+1),sx(i),H-pB+14);
     });
-    // Graphique IMC
-    new Chart(document.getElementById('imcChart'), {
-        type: 'bar',
-        data: {
-            labels: imcData.map((_, i) => 'P' + (i+1)),
-            datasets: [{
-                label: 'IMC',
-                data: imcData,
-                backgroundColor: '#F59E0B'
-            }]
-        }
+    ctx.fillStyle=color; ctx.font='11px Arial'; ctx.textAlign='left';
+    ctx.fillText('— '+label,pL+5,pT+14);
+}
+// CAMEMBERT
+function drawPie(id,data){
+    var g=init(id,250);
+    var ctx=g.ctx,W=g.W,H=g.H;
+    var keys=Object.keys(data),vals=Object.values(data);
+    var total=vals.reduce(function(a,b){return a+b;},0);
+    var colors=['#1A56DB','#0FA86A','#F59E0B','#e74c3c'];
+    var cx=W/2,cy=H/2,r=Math.min(W,H)/2-30;
+    var angle=-Math.PI/2;
+    keys.forEach(function(k,i){
+        var slice=(vals[i]/total)*2*Math.PI;
+        ctx.beginPath(); ctx.moveTo(cx,cy);
+        ctx.arc(cx,cy,r,angle,angle+slice);
+        ctx.closePath(); ctx.fillStyle=colors[i]; ctx.fill();
+        ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.stroke();
+        var mid=angle+slice/2;
+        var lx=cx+Math.cos(mid)*(r+20);
+        var ly=cy+Math.sin(mid)*(r+20);
+        ctx.fillStyle='#333'; ctx.font='11px Arial'; ctx.textAlign='center';
+        ctx.fillText(k+' ('+vals[i]+')',lx,ly);
+        angle+=slice;
     });
+}
+// BOÎTES À MOUSTACHE
+function drawBoxPlots(){
+    var g=init('cBox',300);
+    var ctx=g.ctx,W=g.W,H=g.H;
+    var pL=60,pR=20,pT=30,pB=40;
+    var plotW=W-pL-pR,plotH=H-pT-pB;
+    var all=[];
+    boxes.forEach(function(b){all.push(b.min,b.max);});
+    var gmin=Math.min.apply(null,all),gmax=Math.max.apply(null,all);
+    var grng=gmax-gmin||1;
+    var sy=function(v){return pT+plotH-((v-gmin)/grng)*plotH;};
+    ctx.strokeStyle='#ccc'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pL,pT); ctx.lineTo(pL,pT+plotH); ctx.stroke();
+    ctx.fillStyle='#666'; ctx.font='11px Arial'; ctx.textAlign='right';
+    for(var i=0;i<=5;i++){
+        var v=gmin+grng*i/5;
+        var y=sy(v);
+        ctx.fillText(Math.round(v),pL-5,y+4);
+        ctx.strokeStyle='#eee'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(pL,y); ctx.lineTo(W-pR,y); ctx.stroke();
+    }
+    ctx.strokeStyle='#ccc'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pL,pT+plotH); ctx.lineTo(W-pR,pT+plotH); ctx.stroke();
+    var bw=plotW/boxes.length;
+    boxes.forEach(function(b,i){
+        var cx=pL+bw*i+bw/2;
+        var bwidth=bw*0.4;
+        ctx.strokeStyle=b.col; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(cx,sy(b.max)); ctx.lineTo(cx,sy(b.q3)); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx-bwidth/2,sy(b.max)); ctx.lineTo(cx+bwidth/2,sy(b.max)); ctx.stroke();
+        ctx.fillStyle=b.col+'33'; ctx.strokeStyle=b.col; ctx.lineWidth=2;
+        ctx.fillRect(cx-bwidth/2,sy(b.q3),bwidth,sy(b.q1)-sy(b.q3));
+        ctx.strokeRect(cx-bwidth/2,sy(b.q3),bwidth,sy(b.q1)-sy(b.q3));
+        ctx.strokeStyle='#e74c3c'; ctx.lineWidth=3;
+        ctx.beginPath(); ctx.moveTo(cx-bwidth/2,sy(b.med)); ctx.lineTo(cx+bwidth/2,sy(b.med)); ctx.stroke();
+        ctx.strokeStyle=b.col; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(cx,sy(b.q1)); ctx.lineTo(cx,sy(b.min)); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx-bwidth/2,sy(b.min)); ctx.lineTo(cx+bwidth/2,sy(b.min)); ctx.stroke();
+        ctx.fillStyle='#333'; ctx.font='12px Arial'; ctx.textAlign='center';
+        ctx.fillText(b.label,cx,H-10);
+    });
+}
+// RÉGRESSION
+function drawReg(id,points,line,xL,yL){
+    var g=init(id,280);
+    var ctx=g.ctx,W=g.W,H=g.H;
+    if(!points||points.length<2){
+        ctx.fillStyle='#999'; ctx.font='14px Arial'; ctx.textAlign='center';
+        ctx.fillText('Minimum 2 patients requis',W/2,H/2);
+        return;
+    }
+    var pL=60,pR=20,pT=30,pB=40;
+    var xs=points.map(function(p){return p.x;});
+    var ys=points.map(function(p){return p.y;});
+    var xmin=Math.min.apply(null,xs),xmax=Math.max.apply(null,xs);
+    var ymin=Math.min.apply(null,ys),ymax=Math.max.apply(null,ys);
+    var xrng=xmax-xmin||1,yrng=ymax-ymin||1;
+    var pW=W-pL-pR,pH=H-pT-pB;
+    var sx=function(v){return pL+((v-xmin)/xrng)*pW;};
+    var sy=function(v){return pT+pH-((v-ymin)/yrng)*pH;};
+    ctx.strokeStyle='#ccc'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(pL,pT); ctx.lineTo(pL,pT+pH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pL,pT+pH); ctx.lineTo(W-pR,pT+pH); ctx.stroke();
+    ctx.fillStyle='#666'; ctx.font='10px Arial';
+    ctx.textAlign='center';
+    for(var i=0;i<=4;i++){
+        ctx.fillText(Math.round(xmin+xrng*i/4),sx(xmin+xrng*i/4),H-pB+15);
+    }
+    ctx.textAlign='right';
+    for(var i=0;i<=4;i++){
+        ctx.fillText(Math.round(ymin+yrng*i/4),pL-5,sy(ymin+yrng*i/4)+4);
+    }
+    ctx.fillStyle='#333'; ctx.font='12px Arial'; ctx.textAlign='center';
+    ctx.fillText(xL,W/2,H-5);
+    ctx.save(); ctx.translate(14,H/2); ctx.rotate(-Math.PI/2);
+    ctx.fillText(yL,0,0); ctx.restore();
+    points.forEach(function(p){
+        ctx.beginPath(); ctx.fillStyle='#1A56DB';
+        ctx.arc(sx(p.x),sy(p.y),5,0,2*Math.PI); ctx.fill();
+    });
+    if(line&&line.length>=2){
+        ctx.beginPath(); ctx.strokeStyle='#e74c3c'; ctx.lineWidth=2;
+        ctx.moveTo(sx(line[0].x),sy(line[0].y));
+        ctx.lineTo(sx(line[1].x),sy(line[1].y)); ctx.stroke();
+        ctx.fillStyle='#e74c3c'; ctx.font='11px Arial'; ctx.textAlign='left';
+        ctx.fillText('— Droite de régression',pL+5,pT+15);
+        ctx.fillStyle='#1A56DB';
+        ctx.fillText('● Patients',pL+5,pT+30);
+    }
+}
+window.onload=function(){
+    drawPie('cSexe',sexe);
+    drawBars('cPoids',poids,'Poids (kg)','#1A56DB');
+    drawLine('cFC',fc,'FC (bpm)','#0FA86A');
+    drawBars('cIMC',imc,'IMC','#F59E0B');
+    drawBoxPlots();
+    drawReg('cReg1',rpt.points,rpt.line,'Taille (cm)','Poids (kg)');
+    drawReg('cReg2',rfc.points,rfc.line,'Taille (cm)','FC (bpm)');
+};
 </script>
 {% endblock %}
